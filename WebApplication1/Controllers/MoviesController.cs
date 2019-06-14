@@ -9,6 +9,7 @@ using WebApplication1.MiddleWare;
 using WebApplication1.Interfaces;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace WebApplication1.Controllers
 {
@@ -25,23 +26,37 @@ namespace WebApplication1.Controllers
         [HttpGet("[action]")]
         public IActionResult GetMovie(String searchTerm)
         {
-            IEnumerable<MovieSummary> movies;
-            CinemaWorld cinemaWorld = new CinemaWorld(Configuration.GetSection("CinemaWorldApi").Value, Configuration.GetSection("CinemaWorldAccessToken").Value);
-            FilmWorld filmWorld = new FilmWorld(Configuration.GetSection("FilmWorldApi").Value, Configuration.GetSection("FilmWorldAccessToken").Value);
-            Intermediary im = new Intermediary(cinemaWorld, filmWorld);
-            movies = im.FindMovies(searchTerm).Result;
-            return Ok(movies);
+            try
+            {
+                IEnumerable<MovieSummary> movies;
+                CinemaWorld cinemaWorld = new CinemaWorld(Configuration.GetSection("CinemaWorldApi").Value, Configuration.GetSection("CinemaWorldAccessToken").Value);
+                FilmWorld filmWorld = new FilmWorld(Configuration.GetSection("FilmWorldApi").Value, Configuration.GetSection("FilmWorldAccessToken").Value);
+                Intermediary im = new Intermediary(cinemaWorld, filmWorld);
+                movies = im.FindMovies(searchTerm).Result;
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { message = "Movie Not Found" }) { StatusCode = 500 };
+            }
         }
 
         [HttpGet("[action]")]
         public IActionResult GetMoviePrice(Provider provider, String id)
         {
-            Decimal price;
-            CinemaWorld cinemaWorld = new CinemaWorld(Configuration.GetSection("CinemaWorldApi").Value, Configuration.GetSection("CinemaWorldAccessToken").Value);
-            FilmWorld filmWorld = new FilmWorld(Configuration.GetSection("FilmWorldApi").Value, Configuration.GetSection("FilmWorldAccessToken").Value);
-            Intermediary im = new Intermediary(cinemaWorld, filmWorld);
-            price = im.MoviePrice(provider, id).Result;
-            return Ok(price);
+            try
+            {
+                Decimal price;
+                CinemaWorld cinemaWorld = new CinemaWorld(Configuration.GetSection("CinemaWorldApi").Value, Configuration.GetSection("CinemaWorldAccessToken").Value);
+                FilmWorld filmWorld = new FilmWorld(Configuration.GetSection("FilmWorldApi").Value, Configuration.GetSection("FilmWorldAccessToken").Value);
+                Intermediary im = new Intermediary(cinemaWorld, filmWorld);
+                price = im.MoviePrice(provider, id).Result;
+                return Ok(price);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { message = "Price for the movie not found" }) { StatusCode = 500 };
+            }
         }
     }
 }

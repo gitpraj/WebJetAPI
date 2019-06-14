@@ -10,20 +10,16 @@ namespace WebApplication1.MiddleWare
 {
     public class Intermediary : IMovieProvider
     {
-        CinemaWorld _cinemaWorldClient;
-        FilmWorld _filmWorldClient;
-        List<MiddleWareTech> _all;
-
-        public Intermediary()
-        {
-        }
+        CinemaWorld CinemaWorldProv;
+        FilmWorld filmWorldProv;
+        List<MiddleWareTech> allProviders;
 
         public Intermediary(CinemaWorld cinemaWorld, FilmWorld filmWorld)
         {
-            _cinemaWorldClient = cinemaWorld;
-            _filmWorldClient = filmWorld;
+            CinemaWorldProv = cinemaWorld;
+            filmWorldProv = filmWorld;
 
-            _all = new List<MiddleWareTech> { _cinemaWorldClient , _filmWorldClient };
+            allProviders = new List<MiddleWareTech> { CinemaWorldProv, filmWorldProv };
         }
 
 
@@ -33,22 +29,20 @@ namespace WebApplication1.MiddleWare
             List<string> errorMessages = new List<string>();
             List<Task> tasks = new List<Task>();
 
-            foreach (MiddleWareTech api in _all)
+            foreach (MiddleWareTech api in allProviders)
             {
-                tasks.Add(Task.Run(async () => {
-                    try
-                    {
-                        IEnumerable<MovieSummary> movies = await api.MovieSearchAsync(searchTerm);
-                        allMovies.AddRange(movies);
-                    }
-                    catch (Exception e) 
-                    {
-                        // TODO: Log error
-                        
+                tasks.Add(
+                    Task.Run(async () => {
+                        try
+                        {
+                            IEnumerable<MovieSummary> movies = await api.MovieSearchAsync(searchTerm);
+                            allMovies.AddRange(movies);
+                        }
+                        catch (Exception e) 
+                        {
                             errorMessages.Add("Error from " + api);
-                        
-                    }
-                }));
+                        }
+                    }));
             }
 
             await Task.WhenAll(tasks);
@@ -66,7 +60,7 @@ namespace WebApplication1.MiddleWare
 
         public async Task<decimal> MoviePrice(Provider provider, string movieId)
         {
-            var client = _all.SingleOrDefault(x => x.Provider == provider);
+            var client = allProviders.SingleOrDefault(x => x.Provider == provider);
             var price = await client.GetMoviePriceAsync(movieId);
             return price;
         }

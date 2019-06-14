@@ -11,7 +11,6 @@ namespace WebApplication1.Models
         public string Title { get; set; }
         public int Year { get; set; }
         public string Poster { get; set; }
-        public decimal? Price { get; set; }
         public Provider Provider { get; set; }
 
     }

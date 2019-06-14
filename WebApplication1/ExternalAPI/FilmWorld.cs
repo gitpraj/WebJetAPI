@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Runtime.Caching;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebApplication1.Interfaces;
@@ -24,9 +25,24 @@ namespace WebApplication1.ExternalAPI
             JObject json;
             JArray jsonArr;
             List<MovieSummary> moviesList;
+            ObjectCache cache = MemoryCache.Default;
+
             if (response == "")
             {
                 /* error handle */
+                string moviesCached = cache["filmWorldMovies"] as string;
+                if (moviesCached != null)
+                {
+                    response = cache.Get("filmWorldMovies").ToString();
+                }
+            }
+            else
+            {
+                string moviesCached = cache["filmWorldMovies"] as string;
+                if (moviesCached == null)
+                {
+                    cache.Set("filmWorldMovies", response, null);
+                }
             }
 
             json = JObject.Parse(response);
@@ -38,31 +54,43 @@ namespace WebApplication1.ExternalAPI
             return movies;
         }
 
-        public async Task<MovieDetails> GetMovieDetailsAsync(string id)
-        {
-            //var response = await GetAsync<MovieDetails>($"movie/{id}");
-            var response = await CallExtAPI(apiUrl + "movie/" + id, accessToken);
-            //var movie = response.Data;
-
-            JObject json;
-            MovieDetails movie;
-            if (response == "")
-            {
-                /* error handle */
-            }
-
-            json = JObject.Parse(response);
-            movie = JsonConvert.DeserializeObject<MovieDetails>(response);
-            //var movie = moviesList; // Filter by searchTerm
-            //movies.ForEach(m => { m.Provider = Provider; }); // Set the Provider
-
-            return movie;
-        }
-
         public override async Task<decimal> GetMoviePriceAsync(string movieId)
         {
             var movie = await GetMovieDetailsAsync(movieId);
+            if (movie == null)
+            {
+                return PRICE_NOT_AVAILABLE;
+            }
             return movie.Price;
+        }
+        public async Task<MovieDetails> GetMovieDetailsAsync(string id)
+        {
+            var response = await CallExtAPI(apiUrl + "movie/" + id, accessToken);
+
+            MovieDetails movie;
+            ObjectCache cache = MemoryCache.Default;
+
+            if (response == "")
+            {
+                /* error handle */
+                string moviesCached = cache["filmWorldMovies_"+id] as string;
+                if (moviesCached != null)
+                {
+                    response = cache.Get("filmWorldMovies_"+id).ToString();
+                }
+            }
+            else
+            {
+                string moviesCached = cache["filmWorldMovies_" + id] as string;
+                if (moviesCached == null)
+                {
+                    cache.Set("filmWorldMovies_" + id, response, null);
+                }
+            }
+
+            movie = JsonConvert.DeserializeObject<MovieDetails>(response);
+
+            return movie;
         }
     }
 }

@@ -6,17 +6,26 @@ export class Movie extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { price: '' };
+        this.state = { price: '', errors: ""};
     }
 
-    componentWillMount() {
+    componentDidMount() {
         console.log("fetch the price of movie")
         const id = this.props.movieSummary.id;
         const provider = this.props.movieSummary.provider;
         fetch('api/Movies/GetMoviePrice/?provider='+provider+'&id=' + id)
             .then(response => response.json())
             .then(data => {
-                this.setState({ price: data });
+                if (!data.ok) {
+                    this.setState({ errors: data.message});
+                }
+
+                if (data > 0) {
+                    this.setState({ price: data });
+                } else {
+                    console.log("price not there")
+                    this.setState({ price: "Not Available" });
+                }
             });
     }
 

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Movie } from './Movie';
-import { Form, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import '../index.css';
 
 export class Movies extends Component {
     displayName = Movies.name
 
     constructor(props) {
         super(props);
-        this.state = { movies: [], loading: true };
+        this.state = { movies: [], noResult: false, errors: "" };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,10 +22,19 @@ export class Movies extends Component {
         event.preventDefault();
         const str = this.state.value;
         fetch('api/Movies/GetMovie/?searchTerm=' + str)
-          .then(response => response.json())
+            .then(response => response.json())
             .then(data => {
-              this.setState({ movies: data, loading: false });
-        });
+                if (!data.ok) {
+                    this.setState({ movies: data.message, noResult: true });
+                }
+
+                if (data.length > 0) {
+                    this.setState({ movies: data, noResult: false });
+                } else {
+                    console.log("the mjovie is not found")
+                    this.setState({ movies: data, noResult: true });
+                }
+            });
     }
 
   static moviesDisplay(movies) {
@@ -36,9 +46,9 @@ export class Movies extends Component {
      );
   }
 
-  render() {
-    let contents = this.state.loading
-        ? <div></div>
+    render() {
+        let contents = this.state.noResult
+            ? <div className="no-res"><h1>Movie Not Found</h1></div>
         : Movies.moviesDisplay(this.state.movies);
 
     return (

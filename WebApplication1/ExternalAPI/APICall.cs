@@ -18,34 +18,41 @@ namespace WebApplication1.ExternalAPI
     {
         public string apiUrl;
         public string accessToken;
+        public const int PRICE_NOT_AVAILABLE = -1;
 
         public async Task<string> CallExtAPI(string resource, string accessToken)
         {
-            const int LIMIT = 3;  // 1 = no retry
-
-            int tries = 0;
-            string res = "";
-            do
+            try
             {
-                using (var httpClient = new HttpClient())
+                const int LIMIT = 3;  // 1 = no retry
+
+                int tries = 0;
+                string res = "";
+                do
                 {
-                    httpClient.DefaultRequestHeaders.Add("x-access-token", accessToken);
-                    string result = "";
-                    using (HttpResponseMessage t = await httpClient.GetAsync(resource))
-                    if (t.StatusCode == HttpStatusCode.OK)
+                    using (var httpClient = new HttpClient())
                     {
-                        using (HttpContent content = t.Content)
-                        {
+                        httpClient.DefaultRequestHeaders.Add("x-access-token", accessToken);
+                        string result = "";
+                        using (HttpResponseMessage t = await httpClient.GetAsync(resource))
+                            if (t.StatusCode == HttpStatusCode.OK)
+                            {
+                                using (HttpContent content = t.Content)
+                                {
 
-                            res = await content.ReadAsStringAsync();
-                            //res = JsonConvert.DeserializeObject<byte[]>(result);
-                            return res;
-                        }
+                                    res = await content.ReadAsStringAsync();
+                                    //res = JsonConvert.DeserializeObject<byte[]>(result);
+                                    return res;
+                                }
+                            }
                     }
-                }
 
-            } while (++tries < LIMIT);
-            return res; // Not 200 but return it anyway after a few tries
+                } while (++tries < LIMIT);
+                return res; // Not 200 but return it anyway after a few tries
+            } catch (Exception e)
+            {
+                return "";
+            }
         }
     }
 }
