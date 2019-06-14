@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         public int Year { get; set; }
         public string Poster { get; set; }
         public decimal? Price { get; set; }
-        public string Provider { get; set; }
+        public Provider Provider { get; set; }
 
     }
 }

@@ -14,7 +14,7 @@ using WebApplication1.MiddleWare;
 
 namespace WebApplication1.ExternalAPI
 {
-    public class APICall : Providers
+    public class APICall : MiddleWareTech
     {
         public string apiUrl;
         public string accessToken;

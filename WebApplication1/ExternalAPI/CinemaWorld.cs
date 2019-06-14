@@ -15,13 +15,14 @@ namespace WebApplication1.ExternalAPI
         {
             apiUrl = _apiUrl;
             accessToken = _accessToken;
+            Provider = Provider.CinemaWorld;
         }
 
         public CinemaWorld()
         {
         }
 
-        public override async Task<IEnumerable<MovieSummary>> MovieSearch(string searchTerm)
+        public override async Task<IEnumerable<MovieSummary>> MovieSearchAsync(string searchTerm)
         {
             var response = await CallExtAPI(apiUrl + "movies", accessToken);
             JObject json;
@@ -36,7 +37,7 @@ namespace WebApplication1.ExternalAPI
             jsonArr = JArray.Parse(json["Movies"].ToString());
             moviesList = JsonConvert.DeserializeObject<List<MovieSummary>>(jsonArr.ToString());
             var movies = moviesList.Where(m => m.Title.ToLower().Contains(searchTerm.ToLower(), StringComparison.OrdinalIgnoreCase)).ToList(); // Filter by searchTerm
-            movies.ForEach(m => { m.Provider = "CinemaWorld"; });
+            movies.ForEach(m => { m.Provider = Provider.CinemaWorld; });
 
             return movies;
         }
@@ -62,7 +63,7 @@ namespace WebApplication1.ExternalAPI
             return movie;
         }
 
-        public async Task<decimal> GetMoviePrice(string movieId)
+        public override async Task<decimal> GetMoviePriceAsync(string movieId)
         {
             var movie = await GetMovieDetails(movieId);
             return movie.Price;

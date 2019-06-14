@@ -29,8 +29,8 @@ namespace WebApplication1
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddSingleton(new CinemaWorld(Configuration.GetSection("CinemaWorldApiUrl").Value, Configuration.GetSection("CinemaWorldAccessToken").Value));
-            services.AddSingleton(new FilmWorld(Configuration.GetSection("FilmWorldApiUrl").Value, Configuration.GetSection("FilmWorldAccessToken").Value));
+            //services.AddSingleton(new CinemaWorld(Configuration.GetSection("CinemaWorldApiUrl").Value, Configuration.GetSection("CinemaWorldAccessToken").Value));
+            //services.AddSingleton(new FilmWorld(Configuration.GetSection("FilmWorldApiUrl").Value, Configuration.GetSection("FilmWorldAccessToken").Value));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

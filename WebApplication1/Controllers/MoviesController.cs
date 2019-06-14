@@ -7,38 +7,41 @@ using WebApplication1.ExternalAPI;
 using WebApplication1.Models;
 using WebApplication1.MiddleWare;
 using WebApplication1.Interfaces;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApplication1.Controllers
 {
     [Route("api/[controller]")]
     public class MoviesController : Controller
     {
+        public MoviesController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
         [HttpGet("[action]")]
         public IActionResult GetMovie(String searchTerm)
         {
-            //CinemaWorld cw = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
             IEnumerable<MovieSummary> movies;
-            //movies = cw.MovieSearch("John").Result;
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(Configuration.GetSection("CinemaWorldApi").Value, Configuration.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(Configuration.GetSection("FilmWorldApi").Value, Configuration.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             movies = im.FindMovies(searchTerm).Result;
             return Ok(movies);
         }
 
-        public class WeatherForecast
+        [HttpGet("[action]")]
+        public IActionResult GetMoviePrice(Provider provider, String id)
         {
-            public string DateFormatted { get; set; }
-            public int TemperatureC { get; set; }
-            public string Summary { get; set; }
-
-            public int TemperatureF
-            {
-                get
-                {
-                    return 32 + (int)(TemperatureC / 0.5556);
-                }
-            }
+            Decimal price;
+            CinemaWorld cinemaWorld = new CinemaWorld(Configuration.GetSection("CinemaWorldApi").Value, Configuration.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(Configuration.GetSection("FilmWorldApi").Value, Configuration.GetSection("FilmWorldAccessToken").Value);
+            Intermediary im = new Intermediary(cinemaWorld, filmWorld);
+            price = im.MoviePrice(provider, id).Result;
+            return Ok(price);
         }
     }
 }

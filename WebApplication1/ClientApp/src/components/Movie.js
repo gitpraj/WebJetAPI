@@ -2,10 +2,22 @@
 import { Jumbotron } from 'react-bootstrap';
 
 export class Movie extends Component {
-    displayName = Movie.name
+    displayName = Movie.name  
 
     constructor(props) {
         super(props);
+        this.state = { price: '' };
+    }
+
+    componentWillMount() {
+        console.log("fetch the price of movie")
+        const id = this.props.movieSummary.id;
+        const provider = this.props.movieSummary.provider;
+        fetch('api/Movies/GetMoviePrice/?provider='+provider+'&id=' + id)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ price: data });
+            });
     }
 
     render() {
@@ -14,7 +26,8 @@ export class Movie extends Component {
         const year = this.props.movieSummary.year;
         const id = this.props.movieSummary.id;
         const provider = this.props.movieSummary.provider;
-        console.log("movie: " + JSON.stringify(this.props.movieSummary));
+        const { price } = this.state;
+
         return (
             <div id={id}>
                 <Jumbotron>
@@ -24,7 +37,7 @@ export class Movie extends Component {
                         Provider: {provider}
                     </p>
                     <p>
-                        <em>Price: </em><strong>15$</strong>
+                        <em>Price: </em><strong>{price}</strong>
                     </p>
                 </Jumbotron>
             </div>

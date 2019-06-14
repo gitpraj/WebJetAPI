@@ -6,9 +6,9 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Interfaces
 {
-    public interface MovieProvider
+    public interface IMovieProvider
     {
         Task<IEnumerable<MovieSummary>> FindMovies(string searchTerm);
-        Task<decimal> MoviePrice(MovieProvider provider, string movieId);
+        Task<decimal> MoviePrice(Provider provider, string movieId);
     }
 }
