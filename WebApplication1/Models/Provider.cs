@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 namespace WebApplication1.Models
 {
     public enum Provider
-    { CinemaWorld = 1,
+    {
+        CinemaWorld = 1,
         FilmWorld = 2
     }
 }

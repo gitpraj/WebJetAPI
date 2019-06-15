@@ -33,7 +33,7 @@ namespace WebApplication1.Controllers
                 FilmWorld filmWorld = new FilmWorld(Configuration.GetSection("FilmWorldApi").Value, Configuration.GetSection("FilmWorldAccessToken").Value);
                 Intermediary im = new Intermediary(cinemaWorld, filmWorld);
                 movies = im.FindMovies(searchTerm).Result;
-                return Ok(movies);
+                return Ok(movies);                
             }
             catch (Exception ex)
             {

@@ -8,7 +8,7 @@ export class Movies extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { movies: [], noResult: false, errors: "" };
+        this.state = { movies: [], noResult: true, errorMessage : ""};
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,14 +25,13 @@ export class Movies extends Component {
             .then(response => response.json())
             .then(data => {
                 if (!data.ok) {
-                    this.setState({ movies: data.message, noResult: true });
+                    this.setState({ movies: [], noResult: true, errorMessage: "Movie Not Available"});
                 }
 
                 if (data.length > 0) {
-                    this.setState({ movies: data, noResult: false });
+                    this.setState({ movies: data, noResult: false, errorMessage: ""});
                 } else {
-                    console.log("the mjovie is not found")
-                    this.setState({ movies: data, noResult: true });
+                    this.setState({ movies: [], noResult: true, errorMessage: "Movie Not Available"});
                 }
             });
     }
@@ -48,7 +47,7 @@ export class Movies extends Component {
 
     render() {
         let contents = this.state.noResult
-            ? <div className="no-res"><h1>Movie Not Found</h1></div>
+            ? <div className="no-res"><h1>{this.state.errorMessage}</h1></div>
         : Movies.moviesDisplay(this.state.movies);
 
     return (
