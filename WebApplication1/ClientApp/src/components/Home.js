@@ -21,7 +21,7 @@ export class Home extends Component {
               <p>This is a demo app for WebJetTestAPI. I am sure I have done a good job to demonstrate my web app development skills.</p>
 
               <ul>
-                  <li>The external API response is as quick as possible. </li>
+                  <li>The external API response is as quick as possible, except for the first time the resposne is a bit longer. </li>
                   <li>Two different API's are being handled asynchrnously.</li>
                   <li>The results are cached. The app would still be functioning even if the API fails.</li>
                   <li>I have made sure the App follows the SOLID prinicples as much as possible.</li>

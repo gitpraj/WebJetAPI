@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Movie } from './Movie';
-import { Form, FormGroup, ControlLabel, FormControl, Spinner } from 'react-bootstrap';
+import { Form, FormGroup, FormControl } from 'react-bootstrap';
 import '../index.css';
 
 export class Movies extends Component {

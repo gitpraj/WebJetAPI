@@ -33,6 +33,8 @@ export class Movie extends Component {
                 break;
             case 2: return "FilmWorld"
                 break;
+            default:
+                break;
         }
     }
 
