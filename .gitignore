@@ -341,3 +341,6 @@ healthchecksdb
 
 appsettings.json
 **/appsettings.json
+
+test.json
+**/test.json

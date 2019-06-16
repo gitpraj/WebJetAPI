@@ -18,13 +18,16 @@ namespace WebApplication1.ExternalAPI
     {
         public string apiUrl;
         public string accessToken;
-        public const int PRICE_NOT_AVAILABLE = -1;
 
+        /* CallExtAPI() - 
+         *  Generic GET external API. 
+         *      If successful, return the response as string. 
+         *      If not successful, retry for another time. Return empty string if api fails or any exception */
         public async Task<string> CallExtAPI(string resource, string accessToken)
         {
             try
             {
-                const int LIMIT = 3;  // 1 = no retry
+                const int LIMIT = 2;
 
                 int tries = 0;
                 string res = "";

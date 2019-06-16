@@ -19,6 +19,10 @@ namespace WebApplication1.ExternalAPI
             Provider = Provider.FilmWorld;
         }
 
+        /* MovieSearchAsync() - override the function from MiddleWareTech class
+         *  Calls the external API to get all the movies. If successful, convert the response to JSON, 
+         *      cache it and filter according to search term and then send it back. 
+            If not successful, try to get from cache and send the results or just send empty resposne. */
         public override async Task<IEnumerable<MovieSummary>> MovieSearchAsync(string searchTerm)
         {
             var response = await CallExtAPI(apiUrl + "movies", accessToken);
@@ -54,6 +58,9 @@ namespace WebApplication1.ExternalAPI
             return movies;
         }
 
+        /* GetMoviePriceAsync() - override the function from MiddleWareTech class
+         *  Calls the GetMoviesetails with the id provided. Return the price of the movie.
+         *  return -1 if movie id not present */
         public override async Task<decimal> GetMoviePriceAsync(string movieId)
         {
             var movie = await GetMovieDetailsAsync(movieId);
@@ -63,6 +70,12 @@ namespace WebApplication1.ExternalAPI
             }
             return movie.Price;
         }
+
+        /* GetMovieDetails() - 
+         *  Calls the external API to get details of a particular movie with the id. 
+         *      If successful, convert the response to JSON, 
+         *      cache it and filter according to search term and then send it back. 
+            If not successful, try to get from cache and send the results or just send empty resposne. */
         public async Task<MovieDetails> GetMovieDetailsAsync(string id)
         {
             var response = await CallExtAPI(apiUrl + "movie/" + id, accessToken);

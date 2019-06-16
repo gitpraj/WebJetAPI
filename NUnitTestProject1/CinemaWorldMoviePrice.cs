@@ -9,7 +9,7 @@ using System;
 
 namespace Tests
 {
-    public class CinemaWorldMoviePrice
+    public class CinemaWorldMoviePrice : Config
     {
         [SetUp]
         
@@ -22,10 +22,11 @@ namespace Tests
         [Test]
         public void Test1()
         {
+            var config = InitConfiguration();
             Provider provider = Provider.CinemaWorld;
             string id = "cw0091234";
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             Decimal price = im.MoviePrice(provider, id).Result;
             Assert.AreEqual(-1, price);
@@ -35,10 +36,11 @@ namespace Tests
         [Test]
         public void Test2()
         {
+            var config = InitConfiguration();
             Provider provider = Provider.CinemaWorld;
             string id = "";
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             Decimal price = im.MoviePrice(provider, id).Result;
             Assert.AreEqual(-1, price);
@@ -48,10 +50,11 @@ namespace Tests
         [Test]
         public void Test7()
         {
+            var config = InitConfiguration();
             Provider provider = Provider.CinemaWorld;
             string id = "cw0080684";
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             Decimal price = im.MoviePrice(provider, id).Result;
             Assert.AreEqual(13.5, price);
@@ -61,10 +64,11 @@ namespace Tests
         [Test]
         public void Test8()
         {
+            var config = InitConfiguration();
             Provider provider = Provider.CinemaWorld;
             string id = "cw0076759";
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             Decimal price = im.MoviePrice(provider, id).Result;
             Assert.AreEqual(123.5, price);
@@ -74,10 +78,11 @@ namespace Tests
         [Test]
         public void Test10()
         {
+            var config = InitConfiguration();
             Provider provider = Provider.CinemaWorld;
             string id = "1l./;-=o";
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             Decimal price = im.MoviePrice(provider, id).Result;
             Assert.AreEqual(-1, price);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Movie } from './Movie';
-import { Form, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Spinner } from 'react-bootstrap';
 import '../index.css';
 
 export class Movies extends Component {
@@ -8,7 +8,7 @@ export class Movies extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { movies: [], noResult: true, errorMessage : ""};
+        this.state = { movies: [], noResult: true, errorMessage : "", loading: false};
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,39 +20,40 @@ export class Movies extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        this.setState({ loading: true, errorMessage: "Loading....."});
         const str = this.state.value;
         fetch('api/Movies/GetMovie/?searchTerm=' + str)
             .then(response => response.json())
             .then(data => {
                 if (!data.ok) {
-                    this.setState({ movies: [], noResult: true, errorMessage: "Movie Not Available"});
+                    this.setState({ movies: [], noResult: true, errorMessage: "Movie Not Available", loading: false});
                 }
 
                 if (data.length > 0) {
-                    this.setState({ movies: data, noResult: false, errorMessage: ""});
+                    this.setState({ movies: data, noResult: false, errorMessage: "", loading: false});
                 } else {
-                    this.setState({ movies: [], noResult: true, errorMessage: "Movie Not Available"});
+                    this.setState({ movies: [], noResult: true, errorMessage: "Movie Not Available", loading: false});
                 }
             });
     }
 
-  static moviesDisplay(movies) {
+  static moviesDisplay(movies, searchStr) {
       return (
-
-          movies.map(movie =>
-              <Movie key={movie.id} movieSummary={movie} />
-        )
+          <div>
+              {movies.map(movie =>
+                  <Movie key={movie.id} movieSummary={movie} />)}
+          </div>
      );
   }
 
     render() {
         let contents = this.state.noResult
-            ? <div className="no-res"><h1>{this.state.errorMessage}</h1></div>
-        : Movies.moviesDisplay(this.state.movies);
+            ? <div className="no-res">{this.state.errorMessage}</div>
+            : Movies.moviesDisplay(this.state.movies);
 
     return (
       <div>
-        <h1>Search for Movies</h1>
+        <h1 className="movies-head">Search for Movies</h1>
             <Form onSubmit={this.handleSubmit}>
                 <FormGroup controlId="templateTitle">
                     <FormControl type="text" placeholder="Enter a Movie Title and press Enter"

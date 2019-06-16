@@ -8,25 +8,26 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration.Json;
+using System.IO;
 
 namespace Tests
 {
-    public class AllMovies
+    public class AllMovies : Config
     {
         [SetUp]
-
         public void Setup()
         {
-
         }
 
         /* movies that have "Star Wars". This test checks the number of movies that are returned  */
         [Test]
         public void Test1()
         {
+            var config = InitConfiguration();
             IEnumerable<MovieSummary> movies;
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             movies = im.FindMovies("Star Wars").Result;
 
@@ -39,9 +40,10 @@ namespace Tests
         [Test]
         public void Test2()
         {
+            var config = InitConfiguration();
             IEnumerable<MovieSummary> movies;
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             movies = im.FindMovies("John wick").Result;
 
@@ -54,9 +56,10 @@ namespace Tests
         [Test]
         public void Test3()
         {
+            var config = InitConfiguration();
             IEnumerable<MovieSummary> movies;
-            CinemaWorld cinemaWorld = new CinemaWorld("http://webjetapitest.azurewebsites.net/api/cinemaworld/", "sjd1HfkjU83ksdsm3802k");
-            FilmWorld filmWorld = new FilmWorld("http://webjetapitest.azurewebsites.net/api/filmworld/", "sjd1HfkjU83ksdsm3802k");
+            CinemaWorld cinemaWorld = new CinemaWorld(config.GetSection("CinemaWorldApi").Value, config.GetSection("CinemaWorldAccessToken").Value);
+            FilmWorld filmWorld = new FilmWorld(config.GetSection("FilmWorldApi").Value, config.GetSection("FilmWorldAccessToken").Value);
             Intermediary im = new Intermediary(cinemaWorld, filmWorld);
             movies = im.FindMovies("new hope").Result;
 

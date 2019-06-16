@@ -8,6 +8,10 @@ using WebApplication1.ExternalAPI;
 
 namespace WebApplication1.MiddleWare
 {
+    /* Intermediary class is literally like an intermediary between the API controller and the external controller.
+     * Member: CinemaWorld Provider 
+               FilmWorld Provider
+               allProviders - List of all the providers of type MiddleWareTech class*/
     public class Intermediary : IMovieProvider
     {
         CinemaWorld CinemaWorldProv;
@@ -22,7 +26,7 @@ namespace WebApplication1.MiddleWare
             allProviders = new List<MiddleWareTech> { CinemaWorldProv, filmWorldProv };
         }
 
-
+        /* FindMovies() : parallel async calls (both the providers) to MovieSearchAsync  */
         public async Task<IEnumerable<MovieSummary>> FindMovies(string searchTerm)
         {
             List<MovieSummary> allMovies = new List<MovieSummary>();
@@ -46,18 +50,10 @@ namespace WebApplication1.MiddleWare
             }
 
             await Task.WhenAll(tasks);
-
-            // TODO: Set result relevance so it can be ordered by relevance on the frontend if needed
-
-            //FindMoviesResult result = new FindMoviesResult
-            //{
-            //    Movies = allMovies,
-            //    ErrorMessages = errorMessages
-            //};
-
             return allMovies;
         }
 
+        /* MoviePrice() : async call (Provider which calls) to GetMoviePriceAsync  */
         public async Task<decimal> MoviePrice(Provider provider, string movieId)
         {
             var client = allProviders.SingleOrDefault(x => x.Provider == provider);

@@ -9,7 +9,7 @@ export class NavMenu extends Component {
 
   render() {
     return (
-      <Navbar inverse fixedTop fluid collapseOnSelect>
+        <Navbar inverse fixedTop fluid collapseOnSelect bg="red">
         <Navbar.Header>
           <Navbar.Brand>
             <Link to={'/'}>WebJetTestAPI</Link>

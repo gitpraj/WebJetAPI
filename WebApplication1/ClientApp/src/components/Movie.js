@@ -27,15 +27,24 @@ export class Movie extends Component {
             });
     }
 
+    providerName(prov) {
+        switch (prov) {
+            case 1: return "CinemaWorld"
+                break;
+            case 2: return "FilmWorld"
+                break;
+        }
+    }
+
     render() {
         const title = this.props.movieSummary.title;
         const imgSrc = this.props.movieSummary.poster; // not working
         const year = this.props.movieSummary.year;
         const id = this.props.movieSummary.id;
-        const provider = this.props.movieSummary.provider;
+        const provider = this.providerName(this.props.movieSummary.provider);
         const { price } = this.state;
 
-        let loading = this.state.noResult ? "Loading" : price
+        let loading = this.state.noResult ? "Loading" : "$"+price
 
         return (
             <div id={id}>
@@ -43,6 +52,8 @@ export class Movie extends Component {
                     <h2>{title}</h2>
                     <p>
                         Year: {year} <br/>
+                    </p>
+                    <p>
                         Provider: {provider}
                     </p>
                     <p>
