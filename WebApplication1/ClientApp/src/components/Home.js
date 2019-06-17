@@ -34,6 +34,8 @@ export class Home extends Component {
                   <li>If the external API response takes more than a sec, I can provide details from the cache if present.</li>
                   <li>Authentication/Authorization for the the API's</li>
                   <li>Pagination can be implemented</li>
+                  <li>Web API documentation using swagger</li>
+                  <li>Docker file to setup an run the application</li>
               </ul>
 
          </div>

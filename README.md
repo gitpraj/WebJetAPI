@@ -6,4 +6,4 @@ dotnet run
 
 Run the specified project:
 
-dotnet run --project ./WebApplication/WebApplication.csproj
+dotnet run --project ./WebApplication1/WebApplication1.csproj
