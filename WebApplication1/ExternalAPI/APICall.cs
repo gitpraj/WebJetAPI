@@ -51,7 +51,7 @@ namespace WebApplication1.ExternalAPI
                     }
 
                 } while (++tries < LIMIT);
-                return res; // Not 200 but return it anyway after a few tries
+                return res;
             } catch (Exception e)
             {
                 return "";
