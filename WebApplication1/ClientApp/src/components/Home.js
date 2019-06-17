@@ -30,7 +30,7 @@ export class Home extends Component {
 
               <p>Improvements to be done:</p>
               <ul>
-                  <li>The entire front end needs to be improved, I did not spend a lot of time on the UI.</li>
+                  <li>The entire front end needs to be improved, I did not spend a lot of time on the UI. My focus was on the backend</li>
                   <li>If the external API response takes more than a sec, I can provide details from the cache if present.</li>
                   <li>Authentication/Authorization for the the API's</li>
                   <li>Pagination can be implemented</li>
